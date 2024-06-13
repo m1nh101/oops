@@ -1,7 +1,11 @@
 ﻿namespace Ops.Services.Library.Mediator;
 
-public interface IRequestHandler<in T>
-  where T : class
+public interface IRequest<TResult>
 {
-  Task<object> Handle(T request);
+}
+
+public interface IRequestHandler<TRequest, TResult>
+  where TRequest : IRequest<TResult>
+{
+  Task<TResult> Handle(TRequest request);
 }

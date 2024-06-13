@@ -2,5 +2,5 @@
 
 public interface IMediator
 {
-  Task<object> Send<TRequest>(TRequest request) where TRequest : class;
+  Task<TResult> Send<TRequest, TResult>(TRequest request) where TRequest : IRequest<TResult>;
 }

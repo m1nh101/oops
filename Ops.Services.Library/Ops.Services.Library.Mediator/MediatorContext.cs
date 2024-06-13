@@ -11,11 +11,11 @@ public class MediatorContext : IMediator
     _provider = provider;
   }
 
-  public Task<object> Send<TRequest>(TRequest request)
-    where TRequest : class
+  public Task<TResult> Send<TRequest, TResult>(TRequest request)
+    where TRequest : IRequest<TResult>
   {
     var scope = _provider.CreateScope();
-    var handler = scope.ServiceProvider.GetRequiredService<IRequestHandler<TRequest>>();
+    var handler = scope.ServiceProvider.GetRequiredService<IRequestHandler<TRequest, TResult>>();
     return handler.Handle(request);
   }
 }

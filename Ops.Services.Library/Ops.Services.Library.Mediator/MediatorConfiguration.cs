@@ -7,7 +7,7 @@ public static class MediatorConfiguration
 {
   public static IServiceCollection AddMediator(this IServiceCollection services, Assembly assembly)
   {
-    var root = typeof(IRequestHandler<>);
+    var root = typeof(IRequestHandler<,>);
     var implements = assembly.GetTypes()
       .Where(e => e.GetInterfaces().Any(d => d.IsGenericType && d.GetGenericTypeDefinition() == root));
 
