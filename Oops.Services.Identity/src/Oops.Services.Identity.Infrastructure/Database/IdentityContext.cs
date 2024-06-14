@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Oops.Services.Identity.Application.Contracts;
 using Oops.Services.Identity.Core.Entities;
 
 namespace Oops.Services.Identity.Infrastructure.Database;
 
-public class IdentityContext : DbContext
+public class IdentityContext : DbContext, IIdentityDbContext
 {
   public IdentityContext(DbContextOptions<IdentityContext> options)
     : base(options)

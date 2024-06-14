@@ -1,14 +1,15 @@
-﻿namespace Oops.Services.Identity.Core.Entities;
+﻿using Oops.Services.Identity.Core.Exceptions;
+
+namespace Oops.Services.Identity.Core.Entities;
 
 public class User : IAuditable, ICreatable
 {
   private User() { }
 
-  public User(string username, string email, string password)
+  public User(string username, string email)
   {
     Username = username;
     Email = email;
-    Password = password;
   }
 
   public Key Id { get; private set; } = null!;
@@ -29,6 +30,10 @@ public class User : IAuditable, ICreatable
   {
     Username = username;
   }
+  public void SetPassword(string password)
+  {
+    Password = password;
+  }
 
   public User AssociateToProfile(Profile profile)
   {
@@ -37,11 +42,28 @@ public class User : IAuditable, ICreatable
     Profile = profile;
     return this;
   }
+  public User AssignToRole(Role role)
+  {
+    var isAssignedInRoles = Roles.Any(e => e.Name == role.Name);
+    if (isAssignedInRoles)
+      throw new InvalidRoleException(role.Name);
+
+    Roles.Add(role);
+    return this;
+  }
 
   public Profile LoadProfile()
   {
     ArgumentNullException.ThrowIfNull(Profile);
 
     return Profile;
+  }
+
+  public IEnumerable<string> GetUserRoles()
+  {
+    if(Roles is null)
+      throw new NullReferenceException(nameof(Roles));
+
+    return Roles.Select(x => x.Name);
   }
 }
